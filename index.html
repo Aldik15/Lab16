@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Анимация квадрата и AJAX с jQuery</title>
+    <style>
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .box {
+            width: 100px;
+            height: 100px;
+            background-color: #000;
+            transition: transform 0.5s;
+        }
+
+        #response {
+            text-align: center;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <button id="animateButton">Анимировать</button>
+    <button id="getRequest">Выполнить GET-запрос</button>
+    <button id="postRequest">Выполнить POST-запрос</button>
+    
+    <div id="response"></div>
+    
+    <div class="container">
+        <div class="box"></div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            let isEnlarged = false;
+            $('.box').click(function() {
+                if (isEnlarged) {
+                    $(this).css('transform', 'scale(1)');
+                } else {
+                    $(this).css('transform', 'scale(5)');
+                }
+                isEnlarged = !isEnlarged;
+            });
+
+            $('#getRequest').click(function() {
+                $.get('https://jsonplaceholder.typicode.com/posts/1', function(data) {
+                    $('#response').html('Результат GET-запроса: ' + JSON.stringify(data));
+                });
+            });
+
+            $('#postRequest').click(function() {
+                var postData = {
+                    title: 'Заголовок',
+                    body: 'Текст',
+                    userId: 1
+                };
+
+                $.post('https://jsonplaceholder.typicode.com/posts', postData, function(data) {
+                    $('#response').html('Результат POST-запроса: ' + JSON.stringify(data));
+                });
+            });
+
+            $('#animateButton').click(function() {
+                $('.box').animate({
+                    width: '200px',
+                    height: '200px'
+                }, 1000, function() {
+                    $('.box').animate({
+                        width: '100px',
+                        height: '100px'
+                    }, 1000);
+                });
+            });
+        });
+    </script>
+</body>
+</html>
